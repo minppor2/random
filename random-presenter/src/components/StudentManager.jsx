@@ -7,7 +7,6 @@ export default function StudentManager({ students, setStudents }) {
   const handleAdd = () => {
     if (!inputValue.trim()) return;
 
-    // 쉼표나 줄바꿈, 혹은 공백 여러개로 구분된 문자열을 배열로 변환
     const newStudents = inputValue
       .split(/[\n,]+/)
       .map((s) => s.trim())
@@ -30,32 +29,54 @@ export default function StudentManager({ students, setStudents }) {
   };
 
   return (
-    <div className="student-manager">
-      <h2>🧑‍🎓 학생 명단 관리</h2>
+    <div className="md-card manager-card">
+      <div className="card-header">
+        <span className="material-symbols-rounded">group_add</span>
+        <h2>학생 명단 관리</h2>
+      </div>
       
-      <div className="input-group">
+      <div className="md-text-field-area">
+        <label>학생 이름 추가 (쉼표/줄바꿈 구분)</label>
         <textarea
-          placeholder="추가할 학생 이름을 입력하세요. 여러 명일 경우 줄바꿈이나 쉼표로 구분하세요."
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           rows={3}
         />
-        <button className="btn-primary" onClick={handleAdd}>추가하기</button>
+      </div>
+      <div className="add-action-bar">
+        <button className="btn-tonal" onClick={handleAdd}>
+          <span className="material-symbols-rounded">add</span>
+          추가하기
+        </button>
       </div>
 
       <div className="list-container">
         <div className="list-header">
-          <span>총 인원: {students.length}명</span>
-          <button className="btn-danger-text" onClick={handleClear}>전체 삭제</button>
+          <span className="list-count">
+            <span className="material-symbols-rounded">groups</span>
+            총 인원: {students.length}명
+          </span>
+          {students.length > 0 && (
+            <button className="btn-icon-danger" onClick={handleClear} title="전체 삭제">
+              <span className="material-symbols-rounded">delete_sweep</span>
+            </button>
+          )}
         </div>
-        <ul className="student-list">
+        
+        <ul className="md-list">
           {students.length === 0 ? (
-            <li className="empty-msg">명단이 비어있습니다.</li>
+            <li className="md-list-item empty-state">
+              <span className="material-symbols-rounded">inbox</span>
+              명단이 비어있습니다.
+            </li>
           ) : (
             students.map((student, idx) => (
-              <li key={idx}>
-                <span>{student}</span>
-                <button className="btn-remove" onClick={() => handleRemove(student)}>✕</button>
+              <li key={idx} className="md-list-item">
+                <span className="material-symbols-rounded item-icon">person</span>
+                <span className="item-text">{student}</span>
+                <button className="btn-icon-danger item-action" onClick={() => handleRemove(student)}>
+                  <span className="material-symbols-rounded">close</span>
+                </button>
               </li>
             ))
           )}

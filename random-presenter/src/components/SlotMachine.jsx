@@ -10,7 +10,6 @@ export default function SlotMachine({ students, secretQueue, setSecretQueue }) {
   
   const spinIntervals = useRef([]);
 
-  // cleanup intervals on unmount
   useEffect(() => {
     return () => {
       spinIntervals.current.forEach(clearInterval);
@@ -31,41 +30,32 @@ export default function SlotMachine({ students, secretQueue, setSecretQueue }) {
     setResults([]);
     setDisplayNames(Array(extractCount).fill('?'));
 
-    // 결정된 당첨자 계산
     const finalWinners = [];
     const availableStudents = [...students];
     let currentSecretQueue = [...secretQueue];
 
     for (let i = 0; i < extractCount; i++) {
       if (currentSecretQueue.length > 0) {
-        // 비밀 큐에서 먼저 가져오기
         const secretWinner = currentSecretQueue.shift();
         if (availableStudents.includes(secretWinner)) {
           finalWinners.push(secretWinner);
-          // available에서 제거
           const idx = availableStudents.indexOf(secretWinner);
           availableStudents.splice(idx, 1);
         } else {
-          // 비밀 큐에 있는 이름이 명단에 없으면 무작위 추출로 대체
           const randomIndex = Math.floor(Math.random() * availableStudents.length);
           finalWinners.push(availableStudents[randomIndex]);
           availableStudents.splice(randomIndex, 1);
         }
       } else {
-        // 비밀 큐가 비어있으면 무작위 추출
         const randomIndex = Math.floor(Math.random() * availableStudents.length);
         finalWinners.push(availableStudents[randomIndex]);
         availableStudents.splice(randomIndex, 1);
       }
     }
 
-    // 상태 업데이트 (비밀 큐 소진 적용)
     setSecretQueue(currentSecretQueue);
 
-    // 슬롯머신 애니메이션 효과
-    const duration = 3000; // 3초간 회전
-    
-    // 각 슬롯마다 애니메이션 간격을 다르게 주어 리얼함 부여
+    const duration = 3000;
     spinIntervals.current.forEach(clearInterval);
     spinIntervals.current = [];
 
@@ -76,19 +66,16 @@ export default function SlotMachine({ students, secretQueue, setSecretQueue }) {
           newNames[i] = students[Math.floor(Math.random() * students.length)];
           return newNames;
         });
-      }, 50 + (i * 20)); // 슬롯마다 속도 약간 다르게
+      }, 50 + (i * 20));
       
       spinIntervals.current.push(intervalId);
     }
 
-    // 멈추기
     setTimeout(() => {
       spinIntervals.current.forEach(clearInterval);
       setDisplayNames(finalWinners);
       setResults(finalWinners);
       setIsSpinning(false);
-      
-      // 당첨 효과
       fireConfetti();
     }, duration);
   };
@@ -102,11 +89,9 @@ export default function SlotMachine({ students, secretQueue, setSecretQueue }) {
 
     const interval = setInterval(function() {
       const timeLeft = animationEnd - Date.now();
-
       if (timeLeft <= 0) {
         return clearInterval(interval);
       }
-
       const particleCount = 50 * (timeLeft / duration);
       confetti({
         ...defaults, particleCount,
@@ -120,10 +105,25 @@ export default function SlotMachine({ students, secretQueue, setSecretQueue }) {
   };
 
   return (
-    <div className="slot-machine-container">
-      <div className="controls">
-        <label>
-          추출 인원:
+    <div className="md-card slot-machine-card">
+      <div className="slots">
+        {displayNames.length > 0 ? (
+          displayNames.map((name, idx) => (
+            <div key={idx} className={`slot-item ${results.length > 0 ? 'winner' : 'spinning'}`}>
+              <span className="slot-text">{name}</span>
+            </div>
+          ))
+        ) : (
+          <div className="slot-item empty-slot">
+            <span className="material-symbols-rounded">person_search</span>
+            <span className="slot-text">대기 중</span>
+          </div>
+        )}
+      </div>
+
+      <div className="slot-controls">
+        <div className="md-text-field">
+          <label>추출 인원</label>
           <input 
             type="number" 
             min="1" 
@@ -132,28 +132,15 @@ export default function SlotMachine({ students, secretQueue, setSecretQueue }) {
             onChange={(e) => setExtractCount(parseInt(e.target.value) || 1)}
             disabled={isSpinning}
           />
-        </label>
+        </div>
         <button 
-          className="btn-spin" 
+          className="btn-primary" 
           onClick={handleSpin} 
           disabled={isSpinning || students.length === 0}
         >
-          {isSpinning ? '추출 중...' : '발표자 뽑기! 🎲'}
+          <span className="material-symbols-rounded">play_arrow</span>
+          {isSpinning ? '추출 중...' : '뽑기 시작'}
         </button>
-      </div>
-
-      <div className="slots">
-        {displayNames.length > 0 ? (
-          displayNames.map((name, idx) => (
-            <div key={idx} className={`slot ${results.length > 0 ? 'winner' : 'spinning'}`}>
-              <span className="slot-text">{name}</span>
-            </div>
-          ))
-        ) : (
-          <div className="slot empty-slot">
-            <span className="slot-text">대기 중</span>
-          </div>
-        )}
       </div>
     </div>
   );

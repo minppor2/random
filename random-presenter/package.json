@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",
     "canvas-confetti": "^1.9.4",
+    "mermaid": "^11.15.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },

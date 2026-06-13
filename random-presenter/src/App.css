@@ -1,73 +1,49 @@
 .app-container {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  align-items: center;
+  padding: 24px;
+  min-height: 100vh;
   box-sizing: border-box;
 }
 
 .app-header {
-  text-align: center;
-  margin-bottom: 2rem;
-  animation: bounce 2s infinite alternate ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  margin-bottom: 40px;
 }
 
-.app-header h1 {
-  font-size: 3.5rem;
+.header-icon {
+  font-size: 32px;
+  color: var(--md-sys-color-primary);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface);
   margin: 0;
-  color: #ff8b94;
-  text-shadow: 3px 3px 0px #fff, 6px 6px 0px #ffdfba, 0 10px 20px rgba(255, 139, 148, 0.2);
-  letter-spacing: 2px;
-}
-
-.app-header p {
-  color: #7b7b7b;
-  font-size: 1.3rem;
-  margin-top: 1rem;
-  background: #fff;
-  display: inline-block;
-  padding: 0.5rem 1.5rem;
-  border-radius: 30px;
-  border: 2px dashed #ffdfba;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  letter-spacing: -0.5px;
 }
 
 .app-main {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
-  flex: 1;
-  max-width: 900px;
-  margin: 0 auto;
+  gap: 32px;
   width: 100%;
+  max-width: 800px;
 }
 
-.slot-section {
-  display: flex;
-  justify-content: center;
-}
-
-.manager-section {
-  max-width: 600px;
-  margin: 0 auto;
+.slot-section,
+.manager-section,
+.mindmap-section {
   width: 100%;
-}
-
-.app-footer {
-  text-align: center;
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  color: #a0a0a0;
-  font-size: 1.1rem;
-}
-
-@keyframes bounce {
-  from { transform: translateY(0); }
-  to { transform: translateY(-10px); }
 }
 
 @media (min-width: 768px) {
-  .app-main {
-    flex-direction: column;
+  .app-container {
+    padding: 48px;
   }
 }
