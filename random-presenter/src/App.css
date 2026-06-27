@@ -10,9 +10,17 @@
 .app-header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
   margin-top: 24px;
   margin-bottom: 40px;
+}
+
+.header-title-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .header-icon {
