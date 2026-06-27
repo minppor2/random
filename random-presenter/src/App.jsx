@@ -29,9 +29,7 @@ function App() {
     localStorage.setItem('random-presenter-secret-queue', JSON.stringify(secretQueue));
   }, [secretQueue]);
 
-  if (!isGuideAgreed) {
-    return <EthicsGuideGate onAgree={() => setIsGuideAgreed(true)} />;
-  }
+
 
   return (
     <div className="app-container">
@@ -77,6 +75,10 @@ function App() {
         type={legalModalType} 
         onClose={() => setLegalModalType(null)} 
       />
+
+      {!isGuideAgreed && (
+        <EthicsGuideGate onAgree={() => setIsGuideAgreed(true)} />
+      )}
     </div>
   );
 }
