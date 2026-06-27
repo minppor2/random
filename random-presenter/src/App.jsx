@@ -4,8 +4,11 @@ import StudentManager from './components/StudentManager';
 import SlotMachine from './components/SlotMachine';
 import SecretMenu from './components/SecretMenu';
 import MindmapViewer from './components/MindmapViewer';
+import EthicsGuideGate from './components/EthicsGuideGate';
 
 function App() {
+  const [isGuideAgreed, setIsGuideAgreed] = useState(false);
+
   const [students, setStudents] = useState(() => {
     const saved = localStorage.getItem('random-presenter-students');
     return saved ? JSON.parse(saved) : [];
@@ -23,6 +26,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem('random-presenter-secret-queue', JSON.stringify(secretQueue));
   }, [secretQueue]);
+
+  if (!isGuideAgreed) {
+    return <EthicsGuideGate onAgree={() => setIsGuideAgreed(true)} />;
+  }
 
   return (
     <div className="app-container">
